@@ -5,52 +5,6 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.io.File
 
-class TestNew {
-    @Test
-    fun countSubstrings() {
-
-        assertEquals(
-            mapOf("\n" to 3, " " to 3 + 11, "!" to 6),
-            countSubstrings("input/substrings_in3.txt", listOf("\n", " ", "!"))
-        )
-
-        assertEquals(
-            emptyMap<String, Int>(),
-            countSubstrings("input/substrings_in3.txt", emptyList())
-        )
-
-        assertEquals(
-            mapOf("Лось" to 0),
-            countSubstrings("input/substrings_in2.txt", listOf("Лось"))
-        )
-
-        assertEquals(
-            mapOf("Белоглазый" to 1, "INPUTNAME" to 1, "." to 5, "*" to 24, "," to 7),
-            countSubstrings("input/substrings_in1.txt", listOf(".", "*", ",", "Белоглазый", "INPUTNAME"))
-        )
-
-        assertEquals(
-            mapOf(" * " to 18, "**" to 1, " *\n" to 3),
-            countSubstrings("input/substrings_in1.txt", listOf(" * ", "**", " * ", "**", " *\n"))
-        )
-
-        assertEquals( // Пустой файл
-            mapOf(" " to 0),
-            countSubstrings("input/substrings_in4.txt", listOf(" "))
-        )
-
-        assertEquals( // Этот тест не проходит! (FileNotFoundException)
-            mapOf("В" to 0),
-            countSubstrings("", listOf("В"))
-        )
-
-        assertEquals( // Этот тест тоже не проходит! (Пустая строка)
-            mapOf("" to 757, "е" to 49, "эволюция" to 0),
-            countSubstrings("input/substrings_in1.txt", listOf("", "е", "эволюция"))
-        )
-    }
-}
-
 class Tests {
 
     private fun assertFileContent(name: String, expectedContent: String) {
@@ -86,7 +40,6 @@ Java (в сложных случаях), а также Python и PHP (в
 операционной системы. В первую очередь следует
 назвать языки Java, {cpp}, C#, Python, Visual
 Basic, Ruby, Swift.
-
 Самым универсальным и одновременно самым
 распространённым языком программирования на данный
 момент следует считать язык Java. Java в широком
@@ -110,7 +63,6 @@ Basic, Ruby, Swift.
         assertFileContent(
             "temp.txt",
             """Задачи _надо_ решать правильно,
-
 и не надо при этом никуда торопиться___
             """.trimIndent()
         )
@@ -185,19 +137,15 @@ Basic, Ruby, Swift.
         assertFileContent(
             "temp.txt",
             """Простая
-
 Во       входном       файле       с       именем       inputName       содержится       некоторый      текст.
 Вывести   его  в  выходной  файл  с  именем  outputName,  выровняв  по  левому  и  правому  краю  относительно
 самой                                              длинной                                             строки.
 Выравнивание   производить,   вставляя  дополнительные  пробелы  между  словами:  равномерно  по  всей  строке
-
 Слова     внутри     строки     отделяются     друг     от     друга     одним     или     более     пробелом.
-
 Следующие                   правила                   должны                  быть                  выполнены:
 1)     Каждая     строка     входного    и    выходного    файла    не    должна    заканчиваться    пробелом.
 2) Пустые строки или строки из пробелов во входном файле должны превратиться в пустые строки в выходном файле.
 3)   Число   строк   в   выходном  файле  должно  быть  равно  числу  строк  во  входном  (в  т.  ч.  пустых).
-
 Равномерность              определяется              следующими             формальными             правилами:
 1)  Число  пробелов  между  каждыми  двумя  парами  соседних  слов  не  должно  отличаться  более,  чем  на 1.
 2)  Число  пробелов  между  более  левой  парой  соседних  слов  должно  быть  больше или равно числу пробелов

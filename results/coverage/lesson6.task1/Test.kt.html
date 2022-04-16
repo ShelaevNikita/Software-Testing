@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Parse.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">kfirst</a> &gt; <a href="index.source.html" class="el_package">lesson6.task1</a> &gt; <span class="el_source">Parse.kt</span></div><h1>Parse.kt</h1><pre class="source lang-java linenums">@file:Suppress(&quot;UNUSED_PARAMETER&quot;, &quot;ConvertCallChainIntoSequence&quot;)
+
+package lesson6.task1
+
+import lesson2.task2.daysInMonth
+import java.lang.Exception
+import java.lang.IndexOutOfBoundsException
+
+// Урок 6: разбор строк, исключения
+// Максимальное количество баллов = 13
+// Рекомендуемое количество баллов = 11
+// Вместе с предыдущими уроками (пять лучших, 2-6) = 40/54
+
+/**
+ * Пример
+ *
+ * Время представлено строкой вида &quot;11:34:45&quot;, содержащей часы, минуты и секунды, разделённые двоеточием.
+ * Разобрать эту строку и рассчитать количество секунд, прошедшее с начала дня.
+ */
+fun timeStrToSeconds(str: String): Int {
+<span class="fc" id="L21">    val parts = str.split(&quot;:&quot;)</span>
+<span class="fc" id="L22">    var result = 0</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">    for (part in parts) {</span>
+<span class="fc" id="L24">        val number = part.toInt()</span>
+<span class="fc" id="L25">        result = result * 60 + number</span>
+    }
+<span class="fc" id="L27">    return result</span>
+}
+
+/**
+ * Пример
+ *
+ * Дано число n от 0 до 99.
+ * Вернуть его же в виде двухсимвольной строки, от &quot;00&quot; до &quot;99&quot;
+ */
+<span class="pc bpc" id="L36" title="1 of 6 branches missed.">fun twoDigitStr(n: Int) = if (n in 0..9) &quot;0$n&quot; else &quot;$n&quot;</span>
+
+/**
+ * Пример
+ *
+ * Дано seconds -- время в секундах, прошедшее с начала дня.
+ * Вернуть текущее время в виде строки в формате &quot;ЧЧ:ММ:СС&quot;.
+ */
+fun timeSecondsToStr(seconds: Int): String {
+<span class="fc" id="L45">    val hour = seconds / 3600</span>
+<span class="fc" id="L46">    val minute = (seconds % 3600) / 60</span>
+<span class="fc" id="L47">    val second = seconds % 60</span>
+<span class="fc" id="L48">    return String.format(&quot;%02d:%02d:%02d&quot;, hour, minute, second)</span>
+}
+
+/**
+ * Пример: консольный ввод
+ */
+fun main() {
+<span class="nc" id="L55">    println(&quot;Введите время в формате ЧЧ:ММ:СС&quot;)</span>
+<span class="nc" id="L56">    val line = readLine()</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">    if (line != null) {</span>
+<span class="nc" id="L58">        val seconds = timeStrToSeconds(line)</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (seconds == -1) {</span>
+<span class="nc" id="L60">            println(&quot;Введённая строка $line не соответствует формату ЧЧ:ММ:СС&quot;)</span>
+        } else {
+<span class="nc" id="L62">            println(&quot;Прошло секунд с начала суток: $seconds&quot;)</span>
+        }
+    } else {
+<span class="nc" id="L65">        println(&quot;Достигнут &lt;конец файла&gt; в процессе чтения строки. Программа прервана&quot;)</span>
+    }
+<span class="nc" id="L67">}</span>
+
+
+/**
+ * Средняя (4 балла)
+ *
+ * Дата представлена строкой вида &quot;15 июля 2016&quot;.
+ * Перевести её в цифровой формат &quot;15.07.2016&quot;.
+ * День и месяц всегда представлять двумя цифрами, например: 03.04.2011.
+ * При неверном формате входной строки вернуть пустую строку.
+ *
+ * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
+ * входными данными.
+ */
+
+fun dateStrToDigit(str: String): String {
+<span class="fc" id="L83">    val monthsMap = mutableMapOf(</span>
+<span class="fc" id="L84">        &quot;января&quot; to 1,</span>
+<span class="fc" id="L85">        &quot;февраля&quot; to 2,</span>
+<span class="fc" id="L86">        &quot;марта&quot; to 3,</span>
+<span class="fc" id="L87">        &quot;апреля&quot; to 4,</span>
+<span class="fc" id="L88">        &quot;мая&quot; to 5,</span>
+<span class="fc" id="L89">        &quot;июня&quot; to 6,</span>
+<span class="fc" id="L90">        &quot;июля&quot; to 7,</span>
+<span class="fc" id="L91">        &quot;августа&quot; to 8,</span>
+<span class="fc" id="L92">        &quot;сентября&quot; to 9,</span>
+<span class="fc" id="L93">        &quot;октября&quot; to 10,</span>
+<span class="fc" id="L94">        &quot;ноября&quot; to 11,</span>
+<span class="fc" id="L95">        &quot;декабря&quot; to 12</span>
+    )
+<span class="fc" id="L97">    val parts = str.split(' ')</span>
+<span class="fc" id="L98">    try {</span>
+<span class="fc" id="L99">        val day = parts[0].toInt()</span>
+<span class="fc" id="L100">        val month = monthsMap[parts[1]]!!</span>
+<span class="fc" id="L101">        val year = parts[2].toInt()</span>
+<span class="fc" id="L102">        return when {</span>
+<span class="pc bpc" id="L103" title="1 of 4 branches missed.">            day &gt; 31 || day &lt; 1 -&gt; &quot;&quot;</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">            day &gt; daysInMonth(month, year) -&gt; &quot;&quot;</span>
+<span class="fc" id="L105">            else -&gt; String.format(&quot;%02d.%02d.%d&quot;, day, month, year)</span>
+        }
+<span class="fc" id="L107">    } catch (e: Exception) {</span>
+<span class="fc" id="L108">        return &quot;&quot;</span>
+    }
+}
+
+/**
+ * Средняя (4 балла)
+ *
+ * Дата представлена строкой вида &quot;15.07.2016&quot;.
+ * Перевести её в строковый формат вида &quot;15 июля 2016&quot;.
+ * При неверном формате входной строки вернуть пустую строку
+ *
+ * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
+ * входными данными.
+ */
+<span class="fc" id="L122">fun dateDigitToStr(digital: String): String = TODO()</span>
+
+/**
+ * Средняя (4 балла)
+ *
+ * Номер телефона задан строкой вида &quot;+7 (921) 123-45-67&quot;.
+ * Префикс (+7) может отсутствовать, код города (в скобках) также может отсутствовать.
+ * Может присутствовать неограниченное количество пробелов и чёрточек,
+ * например, номер 12 --  34- 5 -- 67 -89 тоже следует считать легальным.
+ * Перевести номер в формат без скобок, пробелов и чёрточек (но с +), например,
+ * &quot;+79211234567&quot; или &quot;123456789&quot; для приведённых примеров.
+ * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
+ * При неверном формате вернуть пустую строку.
+ *
+ * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
+ */
+<span class="fc" id="L138">fun flattenPhoneNumber(phone: String): String = TODO()</span>
+
+/**
+ * Средняя (5 баллов)
+ *
+ * Результаты спортсмена на соревнованиях в прыжках в длину представлены строкой вида
+ * &quot;706 - % 717 % 703&quot;.
+ * В строке могут присутствовать числа, черточки - и знаки процента %, разделённые пробелами;
+ * число соответствует удачному прыжку, - пропущенной попытке, % заступу.
+ * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
+ * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
+ */
+fun bestLongJump(jumps: String): Int {
+<span class="fc" id="L151">    val results = mutableListOf&lt;Int&gt;()</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">    for (elem in jumps.split(' '))</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        if (elem !in listOf(&quot;-&quot;, &quot;%&quot;))</span>
+<span class="fc" id="L154">            try {</span>
+<span class="fc" id="L155">                val result = elem.toInt()</span>
+<span class="fc" id="L156">                results.add(result)</span>
+<span class="fc" id="L157">            } catch (e: NumberFormatException) {</span>
+<span class="fc" id="L158">                return -1</span>
+            }
+<span class="fc bfc" id="L160" title="All 2 branches covered.">    return results.maxOrNull() ?: -1</span>
+}
+
+/**
+ * Сложная (6 баллов)
+ *
+ * Результаты спортсмена на соревнованиях в прыжках в высоту представлены строкой вида
+ * &quot;220 + 224 %+ 228 %- 230 + 232 %%- 234 %&quot;.
+ * Здесь + соответствует удачной попытке, % неудачной, - пропущенной.
+ * Высота и соответствующие ей попытки разделяются пробелом.
+ * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
+ * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
+ * вернуть -1.
+ */
+fun bestHighJump(jumps: String): Int {
+<span class="fc" id="L175">    val results = mutableListOf&lt;Int&gt;()</span>
+<span class="fc" id="L176">    val splittedString = jumps.split(' ').toMutableList()</span>
+<span class="fc bfc" id="L177" title="All 4 branches covered.">    for (i in 0..splittedString.size - 2)</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (splittedString[i + 1] == &quot;+&quot;) results.add(splittedString[i].toInt())</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">    return results.maxOrNull() ?: -1</span>
+}
+
+/**
+ * Сложная (6 баллов)
+ *
+ * В строке представлено выражение вида &quot;2 + 31 - 40 + 13&quot;,
+ * использующее целые положительные числа, плюсы и минусы, разделённые пробелами.
+ * Наличие двух знаков подряд &quot;13 + + 10&quot; или двух чисел подряд &quot;1 2&quot; не допускается.
+ * Вернуть значение выражения (6 для примера).
+ * Про нарушении формата входной строки бросить исключение IllegalArgumentException
+ */
+fun plusMinus(expression: String): Int{
+<span class="fc bfc" id="L192" title="All 2 branches covered.">    if (!Regex(&quot;&quot;&quot;(\d+\s[+-]\s)+\d+|\d+&quot;&quot;&quot;).matches(expression)) throw IllegalArgumentException()</span>
+<span class="fc" id="L193">    val list = expression.split(&quot; &quot;).toMutableList()</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">    while (list.size &gt; 1) {</span>
+<span class="fc" id="L195">        val res = when (list[1]) {</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">            &quot;+&quot; -&gt; list[0].toInt() + list[2].toInt()</span>
+<span class="pc bpc" id="L197" title="1 of 2 branches missed.">            &quot;-&quot; -&gt; list[0].toInt() - list[2].toInt()</span>
+<span class="nc" id="L198">            else -&gt; throw IllegalArgumentException()</span>
+        }
+<span class="fc" id="L200">        list[0] = res.toString()</span>
+<span class="fc" id="L201">        list.removeAt(1)</span>
+<span class="fc" id="L202">        list.removeAt(1)</span>
+    }
+<span class="fc" id="L204">    return list[0].toInt()</span>
+}
+
+/**
+ * Сложная (6 баллов)
+ *
+ * Строка состоит из набора слов, отделённых друг от друга одним пробелом.
+ * Определить, имеются ли в строке повторяющиеся слова, идущие друг за другом.
+ * Слова, отличающиеся только регистром, считать совпадающими.
+ * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
+ * Пример: &quot;Он пошёл в в школу&quot; =&gt; результат 9 (индекс первого 'в')
+ */
+<span class="fc" id="L216">fun firstDuplicateIndex(str: String): Int = TODO()</span>
+
+/**
+ * Сложная (6 баллов)
+ *
+ * Строка содержит названия товаров и цены на них в формате вида
+ * &quot;Хлеб 39.9; Молоко 62; Курица 184.0; Конфеты 89.9&quot;.
+ * То есть, название товара отделено от цены пробелом,
+ * а цена отделена от названия следующего товара точкой с запятой и пробелом.
+ * Вернуть название самого дорогого товара в списке (в примере это Курица),
+ * или пустую строку при нарушении формата строки.
+ * Все цены должны быть больше нуля либо равны нулю.
+ */
+<span class="fc" id="L229">fun mostExpensive(description: String): String = TODO()</span>
+
+/**
+ * Сложная (6 баллов)
+ *
+ * Перевести число roman, заданное в римской системе счисления,
+ * в десятичную систему и вернуть как результат.
+ * Римские цифры: 1 = I, 4 = IV, 5 = V, 9 = IX, 10 = X, 40 = XL, 50 = L,
+ * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
+ * Например: XXIII = 23, XLIV = 44, C = 100
+ *
+ * Вернуть -1, если roman не является корректным римским числом
+ */
+<span class="fc" id="L242">fun fromRoman(roman: String): Int = TODO()</span>
+
+/**
+ * Очень сложная (7 баллов)
+ *
+ * Имеется специальное устройство, представляющее собой
+ * конвейер из cells ячеек (нумеруются от 0 до cells - 1 слева направо) и датчик, двигающийся над этим конвейером.
+ * Строка commands содержит последовательность команд, выполняемых данным устройством, например +&gt;+&gt;+&gt;+&gt;+
+ * Каждая команда кодируется одним специальным символом:
+ *	&gt; - сдвиг датчика вправо на 1 ячейку;
+ *  &lt; - сдвиг датчика влево на 1 ячейку;
+ *	+ - увеличение значения в ячейке под датчиком на 1 ед.;
+ *	- - уменьшение значения в ячейке под датчиком на 1 ед.;
+ *	[ - если значение под датчиком равно 0, в качестве следующей команды следует воспринимать
+ *  	не следующую по порядку, а идущую за соответствующей следующей командой ']' (с учётом вложенности);
+ *	] - если значение под датчиком не равно 0, в качестве следующей команды следует воспринимать
+ *  	не следующую по порядку, а идущую за соответствующей предыдущей командой '[' (с учётом вложенности);
+ *      (комбинация [] имитирует цикл)
+ *  пробел - пустая команда
+ *
+ * Изначально все ячейки заполнены значением 0 и датчик стоит на ячейке с номером N/2 (округлять вниз)
+ *
+ * После выполнения limit команд или всех команд из commands следует прекратить выполнение последовательности команд.
+ * Учитываются все команды, в том числе несостоявшиеся переходы (&quot;[&quot; при значении под датчиком не равном 0 и &quot;]&quot; при
+ * значении под датчиком равном 0) и пробелы.
+ *
+ * Вернуть список размера cells, содержащий элементы ячеек устройства после завершения выполнения последовательности.
+ * Например, для 10 ячеек и командной строки +&gt;+&gt;+&gt;+&gt;+ результат должен быть 0,0,0,0,0,1,1,1,1,1
+ *
+ * Все прочие символы следует считать ошибочными и формировать исключение IllegalArgumentException.
+ * То же исключение формируется, если у символов [ ] не оказывается пары.
+ * Выход за границу конвейера также следует считать ошибкой и формировать исключение IllegalStateException.
+ * Считать, что ошибочные символы и непарные скобки являются более приоритетной ошибкой чем выход за границу ленты,
+ * то есть если в программе присутствует некорректный символ или непарная скобка, то должно быть выброшено
+ * IllegalArgumentException.
+ * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
+ *
+ */
+<span class="fc" id="L280">fun computeDeviceCells(cells: Int, commands: String, limit: Int): List&lt;Int&gt; = TODO()</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
